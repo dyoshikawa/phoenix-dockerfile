@@ -1,9 +1,12 @@
 FROM elixir:1.6.5-alpine
 MAINTAINER dyoshikawa
 
-RUN mix --force local.hex
-RUN mix --force archive.install https://github.com/phoenixframework/archives/raw/master/phx_new.ez
-RUN mix --force local.rebar
+RUN mix local.hex --force
+RUN mix archive.install https://github.com/phoenixframework/archives/raw/master/phx_new.ez --force
+RUN mix local.rebar --force
 
-RUN mix phx.new . --app /myproject
+RUN mix phx.new /myproject --no-brunch
 WORKDIR /myproject
+RUN mix deps.get
+
+CMD mix phoenix.server
